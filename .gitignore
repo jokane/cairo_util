@@ -1,0 +1,6 @@
+.coverage
+build/
+cairo_util.egg-info/
+cairo_util/__pycache__/
+docs/_build/
+test/__pycache__/
