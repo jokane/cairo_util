@@ -63,16 +63,17 @@ def vflip_font(context):  # pragma: no cover
 
 
 
+@contextlib.contextmanager
 def mapped_context(filename, user_aabb, device_size, fmt=None, padding=0.1):
     """Return a pycairo surface and a context that can be used to create the
     given file.  Coordinates are mapped so that the given axis-aligned bounding
     box is visible within the given device size.  The specific file format can
     be given directly, or guessed from the filename."""
-    with mapped_surface_and_context(filename,
-                                    user_aabb,
-                                    device_size,
-                                    fmt,
-                                    padding) as (_, context):
+    with mapped_surface_and_context(filename=filename,
+                                    user_aabb=user_aabb,
+                                    device_size=device_size,
+                                    fmt=fmt,
+                                    padding=padding) as (_, context):
         yield context
 
 def get_fmt(filename):
@@ -113,11 +114,12 @@ def mapped_surface_and_context(filename, user_aabb, device_size, fmt=None, paddi
 
         device_aabb = ((0, device_size[1]), (device_size[0], 0))
 
-        with cls(filename, user_aabb, device_size) as surface:
+        with cls(filename, device_size[0], device_size[1]) as surface:
             context = cairo.Context(surface)
             matrix = matrix_to_fit_rectangle(user_aabb, device_aabb, padding=padding)
             context.set_matrix(matrix)
             yield surface, context
-
+    elif fmt == '':
+        raise ValueError(f'Could not determine format from filename: {filename}')
     else:
-        raise ValueError('Unknown format {fmt}.')
+        raise ValueError(f'Unknown format {fmt}.')
