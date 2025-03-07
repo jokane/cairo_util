@@ -1,3 +1,7 @@
+# Don't forget to activate Github pages for the repository.
+# - Go to https://github.com/<user>/<repo>/settings/pages
+# - For Build and Deployment -> Source, choose "Github Actions".
+
 name: Deploy Sphinx Documentation
 
 on:
